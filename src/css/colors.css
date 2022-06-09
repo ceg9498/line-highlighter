@@ -1,0 +1,18 @@
+:root {
+	--body: #d6d6d6;
+	--body-light: white;
+	--text: #000;
+	--disabled: rgb(39, 39, 39);
+	/* Regardless of dark/light: */
+	--primary: #0073ff;
+	--primary-dark: #004EAD;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--body: #202124;
+		--body-light: #2F3137;
+		--text: #fff;
+		--disabled: rgb(197, 197, 197);
+	}
+}
