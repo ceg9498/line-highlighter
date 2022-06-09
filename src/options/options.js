@@ -1,9 +1,7 @@
-const onoffToggle = document.getElementById('onoff-toggle');
 const bgToggle = document.getElementById('background-toggle');
 const topToggle = document.getElementById('top-border');
 const botToggle = document.getElementById('bottom-border');
 
-const onoffText = document.getElementById('onoff-text');
 const options = document.getElementById('options');
 const bgSettings = document.getElementById('highlight-extra-settings');
 const topSettings = document.getElementById('top-border-extra-settings');
@@ -31,14 +29,6 @@ chrome.storage.local.get('settings', ({settings}) => {
 		});
 	}
 
-	// fill settings
-	// on/off switch
-	onoffToggle.checked = options.on;
-	setContent(onoffText, onoffToggle.checked ? 'on' : 'off');
-	if(!onoffToggle.checked) {
-		toggleHidden();
-	}
-
 	// background settings
 	bgToggle.checked = options.background;
 	setContent(bgSettings, `
@@ -53,7 +43,7 @@ chrome.storage.local.get('settings', ({settings}) => {
 	// top border
 	topToggle.checked = options.topBorder;
 	setContent(topSettings, `
-	<label>Top border height:&nbsp;
+	<label>Height:&nbsp;
 		<input type='range'
 			id='top-height'
 			value='${options.topWidth}'
@@ -70,7 +60,7 @@ chrome.storage.local.get('settings', ({settings}) => {
 	// bottom border
 	botToggle.checked = options.bottomBorder;
 	setContent(botSettings, `
-	<label>Bottom border height:&nbsp;
+	<label>Height:&nbsp;
 		<input type='range'
 			id='bottom-height'
 			value='${options.bottomWidth}'
@@ -84,12 +74,6 @@ chrome.storage.local.get('settings', ({settings}) => {
 	toUpdateValue(document.getElementById('bottom-color'), 'bottomColor');
 	toggleDisable(botSettings, options.bottomBorder);
 });
-
-onoffToggle.onchange = () => {
-	updateSetting('on', onoffToggle.checked);
-	setContent(onoffText, onoffToggle.checked ? 'on' : 'off');
-	toggleHidden();
-}
 
 bgToggle.onchange = () => {
 	updateSetting('background', bgToggle.checked);
@@ -124,14 +108,6 @@ function toggleDisable(element, status) {
 			children[i].setAttribute('disabled', "");
 			console.log(children[i]);
 		}
-	}
-}
-
-function toggleHidden() {
-	if(options.classList.contains('hidden')) {
-		options.classList.remove('hidden');
-	} else {
-		options.classList.add('hidden');
 	}
 }
 

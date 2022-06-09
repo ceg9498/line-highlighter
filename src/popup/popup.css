@@ -1,0 +1,6 @@
+label {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	min-height: 30px;
+}

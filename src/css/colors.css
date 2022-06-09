@@ -16,3 +16,22 @@
 		--disabled: rgb(197, 197, 197);
 	}
 }
+
+body {
+	background-color: var(--body-light);
+	color: var(--text);
+	width: 325px;
+	padding: 10px;
+
+	font-family: sans-serif;
+	font-size: 0.85rem;
+}
+
+button {
+	display: block;
+	background-color: var(--primary-dark);
+	color: var(--text);
+	border: none;
+	padding: 7px;
+	border-radius: 3px;
+}

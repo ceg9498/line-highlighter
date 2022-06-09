@@ -2,22 +2,21 @@
 	opacity: 0;
 	width: 0;
 	height: 0;
+	margin: 0;
 }
 .switch {
 	position: relative;
-	display: inline-block;
-	padding-left: 20px;
 }
 .slider {
-	position: absolute;
+	position: relative;
 	cursor: pointer;
-	top: 0;
 	left: 0;
 	width: 30px;
 	height: 17px;
 	background-color: var(--primary);
 	-webkit-transition: .4s;
 	transition: .4s;
+	margin-right: 5px;
 	/* rounded */
 	border-radius: 17px;
 }
