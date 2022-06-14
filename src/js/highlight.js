@@ -4,7 +4,7 @@ let minusHeight;
 let on;
 
 highlight.style.position = 'absolute';
-highlight.style.width = '100vw';
+highlight.style.width = '100%';
 highlight.style.left = '0';
 highlight.style.top = '0';
 highlight.style['pointer-events'] = 'none';
