@@ -5,9 +5,9 @@ const settings = document.getElementById('settings');
 const defaultSettings = Object.freeze({
 	on: false,
 	background: true,
-	backgroundColor: '#4045ed',
+	backgroundColor: '#22ff00',
 	backgroundAlpha: '40',
-	backgroundHeight: '20',
+	backgroundHeight: '30',
 	topBorder: false,
 	topWidth: '2',
 	topColor: '#ff0000',
