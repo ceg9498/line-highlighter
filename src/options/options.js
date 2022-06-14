@@ -41,6 +41,7 @@ chrome.storage.local.get('settings', ({settings}) => {
 		<input type='color' id='highlight-color' value='${options.backgroundColor}' />
 	</label>
 	`);
+	document.getElementById('highlight-height').value = options.backgroundHeight;
 	toUpdateValue(document.getElementById('highlight-height'), 'backgroundHeight');
 	toUpdateValue(document.getElementById('highlight-color'), 'backgroundColor');
 	toggleDisable(bgSettings, options.background, bgCurrent);
