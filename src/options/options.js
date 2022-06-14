@@ -155,3 +155,59 @@ document.getElementById('restore-default').onclick = () => {
 	document.getElementById('bottom-height').value = defaultSettings.bottomWidth;
 	document.getElementById('bottom-color').value = defaultSettings.bottomColor;
 }
+
+/**
+ * Highlighter sample code; allows the user to know what the result of options
+ * selected will look like on a web page.
+ */
+
+const container = document.getElementById('sample-view');
+const highlight = document.getElementById('highlight-sample');
+highlight.style.position = 'absolute';
+highlight.style.width = '100%';
+highlight.style.left = '0';
+highlight.style.top = '0';
+highlight.style['pointer-events'] = 'none';
+highlight.style['border-top-style'] = 'solid';
+highlight.style['border-bottom-style'] = 'solid';
+highlight.style['z-index'] = '10';
+
+// user-changable styles
+chrome.storage.local.get('settings', ({settings}) => {
+	setStyles(settings, null);
+});
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+	for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+		setStyles(newValue, oldValue);
+	}
+});
+
+function setStyles(settings, prev) {
+	let minusHeight = (settings.backgroundHeight/2);
+	if(settings.topBorder) minusHeight += parseInt(settings.topWidth);
+	highlight.style.height = settings.backgroundHeight + 'px';
+
+	container.onmousemove = event => {
+		const rect = event.currentTarget.getBoundingClientRect();
+		highlight.style.top = (event.clientY-rect.top+window.scrollY-minusHeight)+"px";
+	}
+
+	if(settings.background) {
+		highlight.style['background-color'] = settings.backgroundColor + settings.backgroundAlpha;
+	} else {
+		highlight.style['background-color'] = 'transparent';
+	}
+	if(settings.topBorder) {
+		highlight.style['border-top-width'] = settings.topWidth + 'px';
+		highlight.style['border-top-color'] = settings.topColor;
+	} else {
+		highlight.style['border-top-width'] = '0px';
+	}
+	if(settings.bottomBorder) {
+		highlight.style['border-bottom-width'] = settings.bottomWidth + 'px';
+		highlight.style['border-bottom-color'] = settings.bottomColor;
+	} else {
+		highlight.style['border-bottom-width'] = '0px';
+	}
+}
