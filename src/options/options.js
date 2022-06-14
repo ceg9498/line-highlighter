@@ -1,17 +1,3 @@
-const bgToggle = document.getElementById('background-toggle');
-const topToggle = document.getElementById('top-border');
-const botToggle = document.getElementById('bottom-border');
-
-const options = document.getElementById('options');
-const bgSettings = document.getElementById('highlight-extra-settings');
-const topSettings = document.getElementById('top-border-extra-settings');
-const botSettings = document.getElementById('bottom-border-extra-settings');
-
-const bgCurrent = document.getElementById('background-current');
-const topCurrent = document.getElementById('top-border-current');
-const botCurrent = document.getElementById('bottom-border-current');
-const currentInfo = 'Currently: ';
-
 const defaultSettings = Object.freeze({
 	on: false,
 	background: true,
@@ -26,6 +12,43 @@ const defaultSettings = Object.freeze({
 	bottomColor: '#ff0000'
 });
 
+// get elements for background settings
+const bgToggle = document.getElementById('background-toggle');
+const bgCurrent = document.getElementById('background-current');
+const bgColor = document.getElementById('highlight-color');
+const bgHeight = document.getElementById('highlight-height');
+const bgSettings = document.getElementById('bg-settings');
+// set the toggle onchange
+bgToggle.onchange = () => {
+	updateSetting('background', bgToggle.checked);
+	toggleDisable(bgSettings, bgToggle.checked, bgCurrent);
+}
+
+// get elements for top border settings
+const topToggle = document.getElementById('top-border');
+const topCurrent = document.getElementById('top-border-current');
+const topHeight = document.getElementById('top-height');
+const topColor = document.getElementById('top-color');
+const topSettings = document.getElementById('top-settings');
+// set the toggle onchange
+topToggle.onchange = () => {
+	updateSetting('topBorder', topToggle.checked);
+	toggleDisable(topSettings, topToggle.checked, topCurrent);
+}
+
+// get elements for bottom border settings
+const botToggle = document.getElementById('bottom-border');
+const botCurrent = document.getElementById('bottom-border-current');
+const botHeight = document.getElementById('bottom-height');
+const botColor = document.getElementById('bottom-color');
+const botSettings = document.getElementById('bot-settings');
+// set the toggle onchange
+botToggle.onchange = () => {
+	updateSetting('bottomBorder', botToggle.checked);
+	toggleDisable(botSettings, botToggle.checked, botCurrent);
+}
+
+
 chrome.storage.local.get('settings', ({settings}) => {
 	const options = settings ?? defaultSettings;
 	if(!settings) {
@@ -35,70 +58,38 @@ chrome.storage.local.get('settings', ({settings}) => {
 	}
 
 	// background settings
+	// set current options
 	bgToggle.checked = options.background;
-	setContent(bgSettings, `
-	<label>Color:&nbsp;
-		<input type='color' id='highlight-color' value='${options.backgroundColor}' />
-	</label>
-	`);
-	document.getElementById('highlight-height').value = options.backgroundHeight;
-	toUpdateValue(document.getElementById('highlight-height'), 'backgroundHeight');
-	toUpdateValue(document.getElementById('highlight-color'), 'backgroundColor');
+	bgColor.value = options.backgroundColor;
+	bgHeight.value = options.backgroundHeight;
+	// set updaters
+	toUpdateValue(bgColor, 'backgroundColor');
+	toUpdateValue(bgHeight,'backgroundHeight');
+	// disable or enable based on current settings
 	toggleDisable(bgSettings, options.background, bgCurrent);
 
 	// top border
+	// set current options
 	topToggle.checked = options.topBorder;
-	setContent(topSettings, `
-	<label>Height:&nbsp;
-		<input type='range'
-			id='top-height'
-			value='${options.topWidth}'
-			min='1' max='40' />
-	</label>
-	<label>Color:&nbsp;
-		<input type='color' id='top-color' value='${options.topColor}' />
-	</label>
-	`);
-	toUpdateValue(document.getElementById('top-height'), 'topWidth');
-	toUpdateValue(document.getElementById('top-color'), 'topColor');
+	topHeight.value = options.topWidth;
+	topColor.value = options.topColor;
+	// set updaters
+	toUpdateValue(topHeight, 'topWidth');
+	toUpdateValue(topColor, 'topColor');
+	// disable or enable based on current settings
 	toggleDisable(topSettings, options.topBorder, topCurrent);
 
 	// bottom border
+	// set current options
 	botToggle.checked = options.bottomBorder;
-	setContent(botSettings, `
-	<label>Height:&nbsp;
-		<input type='range'
-			id='bottom-height'
-			value='${options.bottomWidth}'
-			min='1' max='40' />
-	</label>
-	<label>Color:&nbsp;
-		<input type='color' id='bottom-color' value='${options.bottomColor}' />
-	</label>
-	`);
-	toUpdateValue(document.getElementById('bottom-height'), 'bottomWidth');
-	toUpdateValue(document.getElementById('bottom-color'), 'bottomColor');
+	botHeight.value = options.bottomWidth;
+	botColor.value = options.bottomColor;
+	// set updaters
+	toUpdateValue(botHeight, 'bottomWidth');
+	toUpdateValue(botColor, 'bottomColor');
+	// disable or enable based on current settings
 	toggleDisable(botSettings, options.bottomBorder, botCurrent);
 });
-
-bgToggle.onchange = () => {
-	updateSetting('background', bgToggle.checked);
-	toggleDisable(bgSettings, bgToggle.checked, bgCurrent);
-}
-
-topToggle.onchange = () => {
-	updateSetting('topBorder', topToggle.checked);
-	toggleDisable(topSettings, topToggle.checked, topCurrent);
-}
-
-botToggle.onchange = () => {
-	updateSetting('bottomBorder', botToggle.checked);
-	toggleDisable(botSettings, botToggle.checked, botCurrent);
-}
-
-function setContent(element, content) {
-	element.innerHTML = content;
-}
 
 function toggleDisable(element, status, textElement) {
 	const children = element.getElementsByTagName('input');
@@ -107,19 +98,29 @@ function toggleDisable(element, status, textElement) {
 		for(let i = 0; i < children.length; i++) {
 			children[i].removeAttribute('disabled');
 		}
-		textElement.innerHTML = currentInfo + 'on';
+		textElement.classList.add('on');
+		textElement.classList.remove('off');
 	} else {
 		element.classList.add('disabled');
 		for(let i = 0; i < children.length; i++) {
 			children[i].setAttribute('disabled', "");
 		}
-		textElement.innerHTML = currentInfo + 'off';
+		textElement.classList.add('off');
+		textElement.classList.remove('on');
 	}
 }
 
 function toUpdateValue(element, setting) {
 	element.onchange = (event) => {
 		updateSetting(setting, event.target.value);
+	}
+}
+
+function toUpdateChecked(element, setting) {
+	console.log('adding onchange for', setting);
+	element.onchange = (event) => {
+		console.log('changing:',setting);
+		updateSetting(setting, event.target.checked);
 	}
 }
 
@@ -139,21 +140,21 @@ document.getElementById('restore-default').onclick = () => {
 		settings: defaultSettings
 	});
 	// height
-	document.getElementById('highlight-height').value = defaultSettings.backgroundHeight;
+	bgHeight.value = defaultSettings.backgroundHeight;
 	// background
 	bgToggle.checked = defaultSettings.background;
-	toggleDisable(bgSettings, bgToggle.checked);
-	document.getElementById('highlight-color').value = defaultSettings.backgroundColor;
+	toggleDisable(bgSettings, bgToggle.checked, bgCurrent);
+	bgColor.value = defaultSettings.backgroundColor;
 	// top border
 	topToggle.checked = defaultSettings.topBorder;
-	toggleDisable(topSettings, topToggle.checked);
-	document.getElementById('top-height').value = defaultSettings.topWidth;
-	document.getElementById('top-color').value = defaultSettings.topColor;
+	toggleDisable(topSettings, topToggle.checked, topCurrent);
+	topHeight.value = defaultSettings.topWidth;
+	topColor.value = defaultSettings.topColor;
 	// bottom border
 	botToggle.checked = defaultSettings.bottomBorder;
-	toggleDisable(botSettings, botToggle.checked);
-	document.getElementById('bottom-height').value = defaultSettings.bottomWidth;
-	document.getElementById('bottom-color').value = defaultSettings.bottomColor;
+	toggleDisable(botSettings, botToggle.checked, botCurrent);
+	botHeight.value = defaultSettings.bottomWidth;
+	botColor.value = defaultSettings.bottomColor;
 }
 
 /**

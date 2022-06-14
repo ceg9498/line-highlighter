@@ -27,27 +27,51 @@
 				<label for="background-toggle" class="switch">
 					<input type="checkbox" id="background-toggle" />
 					<span class="slider"></span>
-					<span id="background-current">Currently: on</span>
+					Currently: <span id="background-current"></span>
 				</label>
-				<div id="highlight-extra-settings" class="sub-settings"></div>
+				<div id="bg-settings">
+					<label>Color:&nbsp;
+						<input type='color' id='highlight-color' value='' />
+					</label>
+				</div>
 			</fieldset>
 			<fieldset id="top-border-wrapper">
 				<legend>Top Border</legend>
 				<label for="top-border" class="switch">
 					<input type="checkbox" id="top-border" />
 					<span class="slider"></span>
-					<span id="top-border-current">Currently: off</span>
+					Currently: <span id="top-border-current"></span>
 				</label>
-				<div id="top-border-extra-settings" class="sub-settings"></div>
+				<div id="top-settings">
+					<label>Height:&nbsp;
+						<input type='range'
+							id='top-height'
+							value=''
+							min='1' max='40' />
+					</label>
+					<label>Color:&nbsp;
+						<input type='color' id='top-color' value='' />
+					</label>
+				</div>
 			</fieldset>
 			<fieldset id="bottom-border-wrapper">
 				<legend>Bottom Border</legend>
 				<label for="bottom-border" class="switch">
 					<input type="checkbox" id="bottom-border" />
 					<span class="slider"></span>
-					<span id="bottom-border-current">Currently: off</span>
+					Currently: <span id="bottom-border-current"></span>
 				</label>
-				<div id="bottom-border-extra-settings" class="sub-settings"></div>
+				<div id="bot-settings">
+					<label>Height:&nbsp;
+						<input type='range'
+							id='bottom-height'
+							value=''
+							min='1' max='40' />
+					</label>
+					<label>Color:&nbsp;
+						<input type='color' id='bottom-color' value='' />
+					</label>
+				</div>
 			</fieldset>
 			<button id="restore-default">Restore Defaults</button>
 		</div>

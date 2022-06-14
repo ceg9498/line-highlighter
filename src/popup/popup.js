@@ -40,7 +40,13 @@ settings.onclick = () => {
 }
 
 function setContent(element, content) {
-	element.innerHTML = content;
+	if(content === 'on') {
+		element.classList.add('on');
+		element.classList.remove('off');
+	} else {
+		element.classList.add('off');
+		element.classList.remove('on');
+	}
 }
 
 function updateSetting(key, value) {
