@@ -7,6 +7,11 @@ const bgSettings = document.getElementById('highlight-extra-settings');
 const topSettings = document.getElementById('top-border-extra-settings');
 const botSettings = document.getElementById('bottom-border-extra-settings');
 
+const bgCurrent = document.getElementById('background-current');
+const topCurrent = document.getElementById('top-border-current');
+const botCurrent = document.getElementById('bottom-border-current');
+const currentInfo = 'Currently: ';
+
 const defaultSettings = Object.freeze({
 	on: false,
 	background: true,
@@ -38,7 +43,7 @@ chrome.storage.local.get('settings', ({settings}) => {
 	`);
 	toUpdateValue(document.getElementById('highlight-height'), 'backgroundHeight');
 	toUpdateValue(document.getElementById('highlight-color'), 'backgroundColor');
-	toggleDisable(bgSettings, options.background);
+	toggleDisable(bgSettings, options.background, bgCurrent);
 
 	// top border
 	topToggle.checked = options.topBorder;
@@ -55,7 +60,7 @@ chrome.storage.local.get('settings', ({settings}) => {
 	`);
 	toUpdateValue(document.getElementById('top-height'), 'topWidth');
 	toUpdateValue(document.getElementById('top-color'), 'topColor');
-	toggleDisable(topSettings, options.topBorder);
+	toggleDisable(topSettings, options.topBorder, topCurrent);
 
 	// bottom border
 	botToggle.checked = options.bottomBorder;
@@ -72,42 +77,42 @@ chrome.storage.local.get('settings', ({settings}) => {
 	`);
 	toUpdateValue(document.getElementById('bottom-height'), 'bottomWidth');
 	toUpdateValue(document.getElementById('bottom-color'), 'bottomColor');
-	toggleDisable(botSettings, options.bottomBorder);
+	toggleDisable(botSettings, options.bottomBorder, botCurrent);
 });
 
 bgToggle.onchange = () => {
 	updateSetting('background', bgToggle.checked);
-	toggleDisable(bgSettings, bgToggle.checked);
+	toggleDisable(bgSettings, bgToggle.checked, bgCurrent);
 }
 
 topToggle.onchange = () => {
 	updateSetting('topBorder', topToggle.checked);
-	toggleDisable(topSettings, topToggle.checked);
+	toggleDisable(topSettings, topToggle.checked, topCurrent);
 }
 
 botToggle.onchange = () => {
 	updateSetting('bottomBorder', botToggle.checked);
-	toggleDisable(botSettings, botToggle.checked);
+	toggleDisable(botSettings, botToggle.checked, botCurrent);
 }
 
 function setContent(element, content) {
 	element.innerHTML = content;
 }
 
-function toggleDisable(element, status) {
+function toggleDisable(element, status, textElement) {
 	const children = element.getElementsByTagName('input');
 	if(status){
 		element.classList.remove('disabled');
 		for(let i = 0; i < children.length; i++) {
 			children[i].removeAttribute('disabled');
-			console.log(children[i]);
 		}
+		textElement.innerHTML = currentInfo + 'on';
 	} else {
 		element.classList.add('disabled');
 		for(let i = 0; i < children.length; i++) {
 			children[i].setAttribute('disabled', "");
-			console.log(children[i]);
 		}
+		textElement.innerHTML = currentInfo + 'off';
 	}
 }
 
