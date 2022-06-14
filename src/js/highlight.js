@@ -1,4 +1,3 @@
-const docs = document.getElementsByTagName('p');
 const highlight = document.createElement('div');
 
 let minusHeight;
